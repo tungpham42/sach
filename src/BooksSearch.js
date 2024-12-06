@@ -7,6 +7,7 @@ import {
   Card,
   Modal,
   Pagination,
+  Alert,
 } from "react-bootstrap";
 import axios from "axios";
 import "./BooksSearch.css";
@@ -18,16 +19,22 @@ const BooksSearch = () => {
   const [show, setShow] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [noResults, setNoResults] = useState(false); // To track if no books are found
   const booksPerPage = 12;
 
   const handleSearch = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setNoResults(false); // Reset no-results notification
     try {
       const response = await axios.get(
         `https://openlibrary.org/search.json?q=${query}`
       );
-      setBooks(response.data.docs);
+      const results = response.data.docs;
+      if (results.length === 0) {
+        setNoResults(true);
+      }
+      setBooks(results);
       setCurrentPage(1); // Reset to first page on new search
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -80,6 +87,14 @@ const BooksSearch = () => {
           </Col>
         </Row>
       </Form>
+
+      {/* No results notification */}
+      {noResults && (
+        <Alert variant="warning" className="text-center">
+          Không tìm thấy sách nào. Hãy thử từ khóa khác!
+        </Alert>
+      )}
+
       <Row className="equal-height-cards">
         {currentBooks.map((book, index) => (
           <Col md={4} key={index} className="mb-4">
