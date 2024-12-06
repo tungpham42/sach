@@ -97,7 +97,7 @@ const BooksSearch = () => {
 
       <Row className="equal-height-cards">
         {currentBooks.map((book, index) => (
-          <Col md={4} key={index} className="mb-4">
+          <Col lg={3} md={4} sm={6} xs={12} key={index} className="mb-4">
             <Card className="h-100">
               <Card.Img
                 variant="top"
