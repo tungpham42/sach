@@ -55,7 +55,7 @@ const BooksSearch = () => {
   const getCoverImage = (coverId, title) =>
     coverId
       ? `https://covers.openlibrary.org/b/id/${coverId}-M.jpg`
-      : `https://dummyimage.com/356x200/cccccc/000000.png&text=${encodeURIComponent(
+      : `https://dummyimage.com/356x200/cccccc/555555.png&text=${encodeURIComponent(
           title.trim()
         ).replace(/%20/g, "+")}`;
 
