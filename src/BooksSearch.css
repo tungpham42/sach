@@ -1,0 +1,19 @@
+/* BooksSearch.css */
+.book-cover {
+  height: 200px;
+  object-fit: cover;
+}
+
+.equal-height-cards {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.equal-height-cards .col-md-4 {
+  display: flex;
+  flex-direction: column;
+}
+
+.equal-height-cards .card {
+  flex: 1; /* Ensure all cards take up equal height */
+}
