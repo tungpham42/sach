@@ -8,7 +8,16 @@ import {
   Modal,
   Pagination,
   Alert,
+  Spinner, // Import Spinner
 } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSearch,
+  faInfoCircle,
+  faExternalLinkAlt,
+  faTimes,
+  faRedo, // Import the reset icon
+} from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import "./BooksSearch.css";
 
@@ -62,6 +71,14 @@ const BooksSearch = () => {
     setCurrentPage(pageNumber);
   };
 
+  // Reset the search query and books
+  const handleReset = () => {
+    setQuery("");
+    setBooks([]);
+    setNoResults(false);
+    setCurrentPage(1);
+  };
+
   // Pagination logic
   const indexOfLastBook = currentPage * booksPerPage;
   const indexOfFirstBook = indexOfLastBook - booksPerPage;
@@ -72,7 +89,7 @@ const BooksSearch = () => {
     <>
       <Form onSubmit={handleSearch}>
         <Row className="mb-3">
-          <Col md={10}>
+          <Col lg={8} md={7} sm={6}>
             <Form.Control
               type="text"
               placeholder="Tìm sách theo từ khóa..."
@@ -80,9 +97,25 @@ const BooksSearch = () => {
               onChange={(e) => setQuery(e.target.value)}
             />
           </Col>
-          <Col md={2}>
+          <Col lg={4} md={5} sm={6}>
             <Button variant="primary" type="submit" disabled={loading}>
-              {loading ? "Đang tìm..." : "Tìm kiếm"}
+              {loading ? (
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                  className="mr-2"
+                />
+              ) : (
+                <FontAwesomeIcon icon={faSearch} />
+              )}
+              {loading ? " Đang tìm" : "Tìm kiếm"}
+            </Button>
+            {/* Reset Button */}
+            <Button variant="secondary" onClick={handleReset} className="ms-2">
+              <FontAwesomeIcon icon={faRedo} /> Cài lại
             </Button>
           </Col>
         </Row>
@@ -119,7 +152,7 @@ const BooksSearch = () => {
                   onClick={() => handleShow(book)}
                   className="btn-sm"
                 >
-                  Xem tóm tắt
+                  <FontAwesomeIcon icon={faInfoCircle} /> Xem tóm tắt
                 </Button>
               </Card.Body>
             </Card>
@@ -171,12 +204,12 @@ const BooksSearch = () => {
               )
             }
           >
-            Chi tiết
+            <FontAwesomeIcon icon={faExternalLinkAlt} /> Chi tiết
           </Button>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
-            Đóng
+            <FontAwesomeIcon icon={faTimes} /> Đóng
           </Button>
         </Modal.Footer>
       </Modal>
