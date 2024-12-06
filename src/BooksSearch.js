@@ -77,6 +77,7 @@ const BooksSearch = () => {
     setQuery("");
     setBooks([]);
     setNoResults(false);
+    setLoading(false);
     setCurrentPage(1);
   };
 
