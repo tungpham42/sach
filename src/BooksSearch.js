@@ -8,7 +8,7 @@ import {
   Modal,
   Pagination,
   Alert,
-  Spinner, // Import Spinner
+  Spinner,
 } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -16,7 +16,7 @@ import {
   faInfoCircle,
   faExternalLinkAlt,
   faTimes,
-  faRedo, // Import the reset icon
+  faRedo,
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import "./BooksSearch.css";
@@ -28,13 +28,13 @@ const BooksSearch = () => {
   const [show, setShow] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [noResults, setNoResults] = useState(false); // To track if no books are found
+  const [noResults, setNoResults] = useState(false);
   const booksPerPage = 12;
 
   const handleSearch = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setNoResults(false); // Reset no-results notification
+    setNoResults(false);
     try {
       const response = await axios.get(
         `https://openlibrary.org/search.json?q=${query}`
@@ -44,7 +44,7 @@ const BooksSearch = () => {
         setNoResults(true);
       }
       setBooks(results);
-      setCurrentPage(1); // Reset to first page on new search
+      setCurrentPage(1);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -52,10 +52,12 @@ const BooksSearch = () => {
     }
   };
 
-  const getCoverImage = (coverId) =>
+  const getCoverImage = (coverId, title) =>
     coverId
       ? `https://covers.openlibrary.org/b/id/${coverId}-M.jpg`
-      : "https://placehold.co/356x200?text=No+Cover";
+      : `https://via.placeholder.com/356x200.png?text=${encodeURIComponent(
+          title.trim()
+        )}`;
 
   const handleShow = (book) => {
     setSelectedBook(book);
@@ -71,7 +73,6 @@ const BooksSearch = () => {
     setCurrentPage(pageNumber);
   };
 
-  // Reset the search query and books
   const handleReset = () => {
     setQuery("");
     setBooks([]);
@@ -79,7 +80,6 @@ const BooksSearch = () => {
     setCurrentPage(1);
   };
 
-  // Pagination logic
   const indexOfLastBook = currentPage * booksPerPage;
   const indexOfFirstBook = indexOfLastBook - booksPerPage;
   const currentBooks = books.slice(indexOfFirstBook, indexOfLastBook);
@@ -113,7 +113,6 @@ const BooksSearch = () => {
               )}
               {loading ? " Đang tìm" : "Tìm kiếm"}
             </Button>
-            {/* Reset Button */}
             <Button variant="secondary" onClick={handleReset} className="ms-2">
               <FontAwesomeIcon icon={faRedo} /> Cài lại
             </Button>
@@ -121,7 +120,6 @@ const BooksSearch = () => {
         </Row>
       </Form>
 
-      {/* No results notification */}
       {noResults && (
         <Alert variant="warning" className="text-center">
           Không tìm thấy sách nào. Hãy thử từ khóa khác!
@@ -134,7 +132,7 @@ const BooksSearch = () => {
             <Card className="h-100">
               <Card.Img
                 variant="top"
-                src={getCoverImage(book.cover_i)}
+                src={getCoverImage(book.cover_i, book.title)}
                 alt={book.title}
                 className="book-cover"
               />
@@ -160,7 +158,6 @@ const BooksSearch = () => {
         ))}
       </Row>
 
-      {/* Pagination */}
       {books.length > booksPerPage && (
         <Pagination className="justify-content-center mt-4">
           {Array.from({ length: totalPages }, (_, i) => (
@@ -175,7 +172,6 @@ const BooksSearch = () => {
         </Pagination>
       )}
 
-      {/* Modal for book details */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>{selectedBook?.title}</Modal.Title>
